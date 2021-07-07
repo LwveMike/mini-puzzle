@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+       
+        table, tr, td {
+            border-collapse: collapse;
+            border: 1px solid black;
+            padding: 0;
+            margin: 0;
+        }
+        td {
+            width: 80px;
+            height: 80px;
+            
+            cursor: pointer;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <table>
+        <tr>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+        </tr>
+
+        <tr>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+        </tr>
+
+        <tr>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+        </tr>
+
+        <tr>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+            <td class="casuta"><img src="" alt=""></td>
+        </tr>
+
+        
+       
+    </table>
+
+
+    <script>
+
+        // General 
+
+        const casute = document.querySelectorAll('.casuta');
+        var casuteArr = [...casute];
+        var win = ['16.png', '15.png', '14.png', '13.png', '12.png', '11.png', '10.png', '9.png', '8.png', '7.png',
+                   '6.png', '5.png', '4.png', '3.png', '2.png', '1.png'];
+        
+
+
+        // General functions
+
+        // getRandomArrangedArray
+
+        const getRandomArrangedArray = (max = 15, arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]) => {
+            let farr = [];
+
+            while(max != 0){
+                let index = Math.floor( Math.random() * Math.floor(max));
+                let nr = arr[index];
+                arr.splice(index,1);
+                farr.push(nr);
+                max--;
+            }
+
+            return farr;
+            
+        }
+
+        // assignValuesToTable
+
+        const assignValuesToTable = () => {
+        for(let i=0; i<16;i++){
+            casuteArr[i].childNodes[0].src = `imgs/${arr[i]}.png`;
+            casuteArr[i].childNodes[0].className = `${arr[i]}.png`;
+        }
+            casuteArr[casuteArr.length-1].childNodes[0].src = `imgs/16.png`;
+            casuteArr[casuteArr.length-1].childNodes[0].className = `16.png`;
+        };
+
+        console.log(casuteArr[0].childNodes[0]);
+
+        // check
+
+        const check = (n, e, s, w) => {
+            if((n < 16 && n >= 0) && casuteArr[n].childNodes[0].className == `16.png`){
+                return {
+                    decizie: true,
+                    coord: n
+                };
+            }
+            else if((e < 16 && e >= 0) && casuteArr[e].childNodes[0].className == `16.png`){
+                return {
+                    decizie: true,
+                    coord: e
+                };
+            }
+            else if((s < 16 && s >= 0) && casuteArr[s].childNodes[0].className == `16.png`){
+                return {
+                    decizie: true,
+                    coord: s
+                };
+            }
+            else if((w < 16 && w >= 0) && casuteArr[w].childNodes[0].className == `16.png`){
+                return {
+                    decizie: true,
+                    coord: w
+                };
+            }
+           
+
+            else {
+                return {
+                    decizie: false,
+                    coord: -1
+                };
+            }
+        }
+
+        // checkWin
+
+         const checkWin = (arr1, arr2) => {
+             let i;
+             let r;
+             for(i = 0;i<16;i++){
+                 if(arr1[i] == arr2[i])
+                    continue;
+                else
+                    break;   
+             }
+             if(i == 16){
+                setTimeout( () => {
+                    if (confirm("Joci din nou ? ")) {
+                        location.reload();
+                        } else {
+                        close();
+                        }
+                }, 500);
+                
+               
+            }
+        
+           
+         }
+        
+
+
+        let arr = getRandomArrangedArray();
+
+        assignValuesToTable();
+
+        casuteArr.forEach( (ob, index) => {
+            ob.addEventListener('click', () => {
+                
+                let n, e, s, w;
+                n = index - 4;
+                e = index + 1;
+                s = index + 4;
+                w = index - 1;
+
+
+                if(check(n, e, s, w).decizie == true){
+                    let indexCoord = check(n, e, s, w).coord;
+
+                    let temp = casuteArr[index].childNodes[0].src;
+                    casuteArr[index].childNodes[0].src = casuteArr[indexCoord].childNodes[0].src;
+                    casuteArr[indexCoord].childNodes[0].src = temp;
+
+                    let ttemp = casuteArr[index].childNodes[0].className;
+                    casuteArr[index].childNodes[0].className = casuteArr[indexCoord].childNodes[0].className;
+                    casuteArr[indexCoord].childNodes[0].className = ttemp;
+
+                    let rasp = Array.from(casuteArr, (el) => el.childNodes[0].className);
+
+                    checkWin(rasp, win);
+
+                }
+            })
+        })
+
+        
+        // win - casuteArr.forEach( (ob,index) => { ob.childNodes[0].src = `imgs/${win[index]}`; ob.childNodes[0].className = win[index] })
+
+    </script>
+    
+</body>
+</html>
